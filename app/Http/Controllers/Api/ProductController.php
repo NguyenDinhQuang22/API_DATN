@@ -238,7 +238,7 @@ class ProductController extends Controller
         try {
             $product = Product::findOrFail($id);
             $product->category_id =  (!empty($request->category_id)) ? $request->category_id : null;
-            $product->brand_id =  (!empty($request->brand_id)) ? $request->brand_id : null;
+            // $product->brand_id =  (!empty($request->brand_id)) ? $request->brand_id : null;
             $product->name = $request->name;
             $product->default_price = $request->default_price;
             $product->room_area = $request->room_area;
