@@ -4,6 +4,7 @@ use App\Http\Controllers\Api\BannerController;
 use App\Http\Controllers\Api\BrandsController;
 use App\Http\Controllers\Api\CartController;
 use App\Http\Controllers\Api\CustomerController;
+use App\Http\Controllers\Api\EvaluateController;
 use App\Http\Controllers\Api\Import_OrdersController;
 use App\Http\Controllers\Api\testdbController;
 use App\Http\Controllers\Api\Category_ProductController;
@@ -26,6 +27,7 @@ use App\Http\Controllers\Api\MailController;
 use App\Http\Controllers\Api\VoucherController;
 use App\Http\Controllers\Api\ExportOrderController;
 // use App\Http\Controllers\Api\ImportOrderController;
+use App\Http\Controllers\Api\ReportController;
 use App\Http\Controllers\UploadController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -70,6 +72,19 @@ Route::middleware('auth:sanctum')->group(function () {
 });
 
 
+// báo cáo
+Route::get('/evaluate', [EvaluateController::class, 'index']);
+Route::get('/evaluate/{id}', [EvaluateController::class, 'show']);
+// Route::post('/evaluate', [EvaluateController::class, 'store']);
+// Route::put('/evaluate/{id}', [EvaluateController::class, 'update']);
+Route::delete('/evaluate/{id}', [EvaluateController::class, 'destroy']);
+ // đánh giá
+Route::get('/report', [ReportController::class, 'index']);
+Route::get('/report/{id}', [ReportController::class, 'show']);
+// Route::post('/report', [ReportController::class, 'store']);
+// Route::put('/report/{id}', [ReportController::class, 'update']);
+Route::delete('/report/{id}', [ReportController::class, 'destroy']);
+ 
 Route::group(['middleware' => ['auth:sanctum', 'admin']], function () {
     // Route::group(['middleware'=> ['auth:sanctum','can:access-admin']],function(){
     // Route::get('/user', function (Request $request) {
