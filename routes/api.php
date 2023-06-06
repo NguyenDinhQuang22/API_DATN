@@ -327,6 +327,8 @@ Route::group(['middleware' => ['auth:sanctum', 'user']], function () {
     Route::post('payment-order', [OrderController::class, 'store']);
     // sản phẩm liên quan theo id
     Route::get('/products/{id}', [ProductController::class, 'show']);
+
+    Route::post('/add-news', [ProductController::class, 'store']);
 });
 
 
