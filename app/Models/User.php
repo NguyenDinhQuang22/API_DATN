@@ -35,7 +35,14 @@ class User extends Authenticatable
         'password',
         'remember_token',
     ];
-
+    // public function customer()
+    // {
+    //     return $this->hasOne(::class, 'customer_id');
+    // }
+    // public function staff()
+    // {
+    //     return $this->hasOne(Carts::class, 'customer_id');
+    // }
     /**
      * The attributes that should be cast.
      *
@@ -48,5 +55,10 @@ class User extends Authenticatable
     public function cart()
     {
         return $this->hasOne(Carts::class, 'customer_id');
+    }
+
+    public function product()
+    {
+        return $this->hasMany(Product::class, 'user_id');
     }
 }

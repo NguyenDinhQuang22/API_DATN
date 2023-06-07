@@ -65,7 +65,6 @@ class AuthController extends Controller
             throw new \Exception($validate->errors(), 422);
         }
         try {
-
             $user = User::create([
                 // dd($user->all()),
                 'name' => $request->name,

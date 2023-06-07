@@ -75,22 +75,20 @@ class Front_end_Controller extends Controller
                 },
             ])->select(['id', 'name', 'quantity', 'default_price', 'category_id', 'brand_id','created_at'])
                 ->where('brand_id', 2)->orderBy('id', 'desc')->get(),
-            // 'news_all_3' => Product::with([
-            //     'category',
-            //     'brand',
-            //     'images' => function ($query) {
-            //         $query->select('image', 'product_id')->orderBy('product_id')->distinct();
-            //     },
-            // ])->select(['id', 'name', 'quantity', 'default_price', 'category_id', 'brand_id'])
-            //     ->where('brand_id', 3)->orderBy('id', 'desc')->get(),
-
             'news_all'=>Product::with([
                 'category',
                 'brand',
                 'images' => function ($query) {
                     $query->select('image', 'product_id')->orderBy('product_id')->distinct();
                 },
-            ])->where('status', 1)->orderBy('id', 'desc')->limit(4)->get(),
+            ])->where('status', 1)->orderBy('id', 'desc')->get(),
+            'category'=>Category_product::where('status',1)->get(),
+            // 'news'=>Product::with([
+            //     'category',
+            //     'brand',
+            //     'images' => function ($query) {
+            //         $query->select('image', 'product_id')->orderBy('product_id')->distinct();
+            //     }, ])->where('status', 1)->orderBy('id', 'desc')->get(),
         ], 200);
     }
 
@@ -253,6 +251,9 @@ class Front_end_Controller extends Controller
     {
         $product = Product::with([
             'brand',
+            'customer',
+            'ward',
+            'district',
             'category',
             'images' => function ($query) {
                 $query->select('image', 'product_id')->orderBy('product_id')->distinct();
@@ -325,4 +326,55 @@ class Front_end_Controller extends Controller
     {
         //
     }
+    public function filterProducts(Request $request)
+    {
+        try {
+            $query = Product::with([
+                'brand',
+                'district',
+                'ward',
+                'category',
+                'images' => function ($query) {
+                    $query->select('image', 'product_id')->orderBy('product_id')->distinct();
+                },
+            ])->where('status', 1)->orderBy('id', 'desc');
+
+            if ($request->has('category_id')) {
+                $query->where('category_id', $request->category_id);
+            }
+            if ($request->has('min_price')) {
+                $query->where('default_price', '>=', $request->min_price);
+            }
+            if ($request->has('max_price')) {
+                $query->where('default_price', '<=', $request->max_price);
+            }
+            if ($request->has('min_area')) {
+                $query->where('room_area', '>=', $request->min_area);
+            }
+            if ($request->has('max_area')) {
+                $query->where('room_area', '<=', $request->max_area);
+            }
+            // giới tính
+            if ($request->has('preferred_gender')) {
+                $query->where('preferred_gender', $request->preferred_gender);
+            }
+            // trọ tự quản
+            if ($request->has('self_governance')) {
+                $query->where('self_governance', $request->self_governance);
+            }
+            if ($request->has('wards_id')) {
+                $query->where('wards_id', $request->wards_id);
+            }
+            if ($request->has('district_id')) {
+                $query->where('district_id', $request->district_id);
+            }
+
+            $products = $query->get();
+
+            return response()->json($products);
+        } catch (\Exception $e) {
+            dd($e);
+        }
+    }
+
 }
