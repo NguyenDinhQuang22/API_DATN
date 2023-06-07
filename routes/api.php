@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\AddressController;
 use App\Http\Controllers\Api\BannerController;
 use App\Http\Controllers\Api\BrandsController;
 use App\Http\Controllers\Api\CartController;
@@ -84,7 +85,7 @@ Route::get('/report/{id}', [ReportController::class, 'show']);
 // Route::post('/report', [ReportController::class, 'store']);
 // Route::put('/report/{id}', [ReportController::class, 'update']);
 Route::delete('/report/{id}', [ReportController::class, 'destroy']);
- 
+
 Route::group(['middleware' => ['auth:sanctum', 'admin']], function () {
     // Route::group(['middleware'=> ['auth:sanctum','can:access-admin']],function(){
     // Route::get('/user', function (Request $request) {
@@ -305,12 +306,16 @@ Route::group(['namespace' => 'App\Http\Controllers\Api'], function () {
 // Route::delete('/testdb/{id}', [testdbController::class, 'destroy']);
 
 
+    // địa chỉ
+    Route::get('/provinces', [AddressController::class, 'getProvinces']);
+    Route::get('/districts/{provinceId}', [AddressController::class, 'getDistricts']);
+    Route::get('/wards/{districtId}', [AddressController::class, 'getWards']);
 
 
 
 // Front end
 
-
+Route::get('/filter_products',  [Front_end_Controller::class, 'filterProducts']);
 Route::get('/get_posts', [Front_end_Controller::class, 'posts']);
 Route::get('/get_posts/{id}', [Front_end_Controller::class, 'show_posts']);
 Route::get('/get_product', [Front_end_Controller::class, 'index']);
@@ -344,6 +349,11 @@ Route::group(['middleware' => ['auth:sanctum', 'user']], function () {
     Route::get('/products/{id}', [ProductController::class, 'show']);
 
     Route::post('/add-news', [ProductController::class, 'store']);
+    Route::get('/news', [ProductController::class, 'index']);
+    Route::get('/news-list', [ProductController::class, 'getCart']);
+    Route::delete('/news/{id}', [ProductController::class, 'destroy']);
+    Route::get('/news/{id}', [ProductController::class, 'show']);
+    Route::post('/news/{id}', [ProductController::class, 'update']);
 });
 
 

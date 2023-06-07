@@ -35,6 +35,19 @@ class Product extends Model
     {
         return $this->belongsTo(Brands::class);
     }
+    public function customer()
+    {
+        return $this->belongsTo(User::class, 'user_id');
+    }
+    public function ward()
+    {
+        return $this->belongsTo(Ward::class, 'wards_id');
+    }
+    public function district()
+    {
+        return $this->belongsTo(District::class, 'district_id');
+    }
+
     /**
      * The attributes that are mass assignable.
      *
@@ -59,5 +72,10 @@ class Product extends Model
         'hashtag',
         'quantity',
         'status',
+        'address',
+        'province_id',
+        'district_id',
+        'wards_id',
+        'user_id'
     ];
 }

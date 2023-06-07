@@ -16,6 +16,7 @@ use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Controllers\UploadController;
 use App\Models\Brands;
+use App\Models\District;
 use App\Models\Image;
 use Exception;
 use Illuminate\Support\Str;
@@ -53,6 +54,19 @@ class ProductController extends Controller
                 'messege' => 'Thất bại!',
             ], 200);
         }
+    }
+    public function getCart()
+    {
+        // dd(auth()->user());
+        $product = auth()->user()->product;
+        // if (!$product) {
+        //     return response()->json([
+        //         'message' => 'Giỏ hàng của bạn hiện đang trống!'
+        //     ]);
+        // }
+        // $product->load('cartDetails.product.images');
+
+        return response()->json($product);
     }
 
     public function updateStatus(Request $request, $id)
@@ -108,9 +122,15 @@ class ProductController extends Controller
         try {
             // return $result;
             $product = new Product();
+            $staffId = $request->user()->id;
             $product->category_id =  (!empty($request->category_id)) ? $request->category_id : null;
             // $product->brand_id =  (!empty($request->brand_id)) ? $request->brand_id : null;
+            $product->user_id = $staffId;
             $product->name = $request->name;
+            $product->address = $request->address;
+            $product->province_id = $request->province_id;
+            $product->district_id = $request->district_id;
+            $product->wards_id = $request->wards_id;
             $product->default_price = $request->default_price;
             $product->room_area = $request->room_area;
             $product->at_maximum = $request->at_maximum;
@@ -144,11 +164,6 @@ class ProductController extends Controller
                     }
                 }
             }
-            // $warehouse = new Warehouse();
-            // $warehouse->product_id = $product->id;
-            // // $warehouse->amount = $request->amount;
-            // $warehouse->save();
-
             // $image = new
             DB::commit();
             return response()->json([
@@ -173,13 +188,16 @@ class ProductController extends Controller
     public function show($id)
     {
         try {
-            $product = Product::with(['images', 'category'])->findOrFail($id);
-            $product_related = Product::with(['images', 'category'])->where('category_id', $product->category_id)->whereNotIn('id', [$id])->get();
+            $product = Product::with(['images', 'category','district','ward','customer'])->findOrFail($id);
+            // $product_related = Product::with(['images', 'category'])->where('category_id', $product->category_id)->whereNotIn('id', [$id])->get();
+        //    $District= District::get();
             $images = $product->images;
             return response()->json([
                 'product' => $product,
-                'product_related' => $product_related,
-                'images' => $images
+                // 'product_related' => $product_related,
+                'images' => $images,
+                // 'dis'=>$District,
+
             ]);
         } catch (\Exception $e) {
 
@@ -240,6 +258,10 @@ class ProductController extends Controller
             $product->category_id =  (!empty($request->category_id)) ? $request->category_id : null;
             // $product->brand_id =  (!empty($request->brand_id)) ? $request->brand_id : null;
             $product->name = $request->name;
+            $product->address = $request->address;
+            $product->province_id = $request->province_id;
+            $product->district_id = $request->district_id;
+            $product->wards_id = $request->wards_id;
             $product->default_price = $request->default_price;
             $product->room_area = $request->room_area;
             $product->at_maximum = $request->at_maximum;
