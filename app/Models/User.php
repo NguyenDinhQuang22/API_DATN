@@ -61,4 +61,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(Product::class, 'user_id');
     }
+
+    public function save_news()
+    {
+        return $this->hasMany(Savenews::class, 'user_id');
+    }
 }

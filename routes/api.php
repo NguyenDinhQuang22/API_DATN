@@ -29,6 +29,7 @@ use App\Http\Controllers\Api\VoucherController;
 use App\Http\Controllers\Api\ExportOrderController;
 // use App\Http\Controllers\Api\ImportOrderController;
 use App\Http\Controllers\Api\ReportController;
+use App\Http\Controllers\Api\SavenewsController;
 use App\Http\Controllers\UploadController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -354,6 +355,11 @@ Route::group(['middleware' => ['auth:sanctum', 'user']], function () {
     Route::delete('/news/{id}', [ProductController::class, 'destroy']);
     Route::get('/news/{id}', [ProductController::class, 'show']);
     Route::post('/news/{id}', [ProductController::class, 'update']);
+
+    Route::get('/save_news', [SavenewsController::class, 'index']);
+    Route::post('/save_news', [SavenewsController::class, 'store']);
+    Route::delete('/save_news', [SavenewsController::class, 'delete']);
+
 });
 
 
