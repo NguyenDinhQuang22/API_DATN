@@ -58,11 +58,13 @@ class Front_end_Controller extends Controller
         $product = Product::with([
             'category',
             'brand',
+            'district',
+            'ward',
             'images' => function ($query) {
                 $query->select('image', 'product_id')->orderBy('product_id')->distinct();
             },
         ])
-            ->select(['id', 'name', 'quantity', 'default_price', 'category_id', 'brand_id','created_at'])
+            ->select('*')
             ->orderBy('id', 'desc');
 
         return response()->json([
@@ -70,14 +72,18 @@ class Front_end_Controller extends Controller
             'news_all_2' => Product::with([
                 'category',
                 'brand',
+                'district',
+                'ward',
                 'images' => function ($query) {
                     $query->select('image', 'product_id')->orderBy('product_id')->distinct();
                 },
-            ])->select(['id', 'name', 'quantity', 'default_price', 'category_id', 'brand_id','created_at'])
+            ])->select('*')
                 ->where('brand_id', 2)->orderBy('id', 'desc')->get(),
             'news_all'=>Product::with([
                 'category',
                 'brand',
+                'district',
+                'ward',
                 'images' => function ($query) {
                     $query->select('image', 'product_id')->orderBy('product_id')->distinct();
                 },
