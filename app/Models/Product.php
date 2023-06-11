@@ -48,6 +48,10 @@ class Product extends Model
         return $this->belongsTo(District::class, 'district_id');
     }
 
+   public function save_news()
+    {
+        return $this->hasMany(Savenews::class,'news_id');
+    }
     /**
      * The attributes that are mass assignable.
      *
