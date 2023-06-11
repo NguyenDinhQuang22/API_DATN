@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\Request;
 use App\Models\Customer;
-
+use Illuminate\Support\Facades\DB;
 class CustomerController extends Controller
 {
     /**
@@ -16,13 +16,22 @@ class CustomerController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index()
-    {
-
-        // return response()->json([
-        //     'messege' => 'day !',
-        //     'data' => Customer::all(),
-        // ], 200);
-        return Customer::all();
+    { 
+        // return Customer::all();
+        try {
+            $users = DB::table('users')
+            ->select('users.*')
+            ->where('role','customer')
+            ->get();
+        return response()->json([
+            
+            'users'=>$users,    
+           
+           
+        ], 200);
+        } catch (\Exception $e) {
+            dd($e);
+        }
     }
 
     /**

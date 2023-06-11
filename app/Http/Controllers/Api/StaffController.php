@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\Request;
 use App\Models\Staff;
-
+use Illuminate\Support\Facades\DB;
 
 class StaffController extends Controller
 {
@@ -18,12 +18,21 @@ class StaffController extends Controller
      */
     public function index()
     {
-        //
-        // return response()->json([
-        //     'messege' => 'day la bang nhan vien!',
-        //     'data' => Staff::all(),
-        // ], 200);
-        return Staff::get();
+        // return Staff::get();
+        try {
+            $users = DB::table('users')
+            ->select('users.*')
+            ->where('role','staff')
+            ->get();
+        return response()->json([
+            
+            'users'=>$users,    
+           
+           
+        ], 200);
+        } catch (\Exception $e) {
+            dd($e);
+        }
     }
 
     /**

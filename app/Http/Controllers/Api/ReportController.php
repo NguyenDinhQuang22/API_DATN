@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Report;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
 
@@ -16,14 +17,29 @@ class ReportController extends Controller
      */
     public function index()
     {
+        // try {
+        //     return Report::all();
+        // } catch (\Exception $e) {
+        //    return response()->json([
+            
+        //     'message' => 'Mở thất bại!',
+        // ], 200);
+        // }
         try {
-            return Report::all();
-        } catch (\Exception $e) {
-           return response()->json([
-            // dd($e),
-            'message' => 'Mở thất bại!',
+            $reports = DB::table('reports')
+        ->join('da5_product', 'reports.news_id', '=', 'da5_product.id')
+        ->select('reports.content', 'da5_product.name as news_name','da5_product.id as news_id')
+        ->get();
+        return response()->json([
+            
+            'reports'=>$reports,    
+           
+           
         ], 200);
+        } catch (\Exception $e) {
+            dd($e);
         }
+        // dd('test');
     }
 
     /**
